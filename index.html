@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR REAN SIM DATABASE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: #0a0e1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
+        }
+
+        .card {
+            background: rgba(20, 27, 48, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 45px 40px 35px;
+            max-width: 520px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%, transparent, rgba(102, 126, 234, 0.03), transparent, rgba(118, 75, 162, 0.03), transparent);
+            animation: rotateGlow 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotateGlow {
+            to { transform: rotate(360deg); }
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin-bottom: 16px;
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-wrapper:hover {
+            transform: scale(1.05) rotate(-3deg);
+        }
+
+        .logo-wrapper i {
+            font-size: 34px;
+            color: white;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .country-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .country-badge i {
+            color: #667eea;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .input-group:focus-within {
+            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+        }
+
+        .input-group input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 18px;
+            font-size: 16px;
+            color: #ffffff;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 400;
+        }
+
+        .btn-check {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-check:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.35);
+        }
+
+        .btn-check:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quick-numbers {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            justify-content: center;
+        }
+
+        .quick-numbers button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .quick-numbers button:hover {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px 0 20px;
+        }
+
+        .loading.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .spinner {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.06);
+            border-top-color: #667eea;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 14px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+
+        .result {
+            display: none;
+            margin-top: 24px;
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 4px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item .label {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-item .label i {
+            color: #667eea;
+            font-size: 14px;
+            width: 18px;
+            text-align: center;
+        }
+
+        .result-item .value {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: right;
+            word-break: break-word;
+            max-width: 60%;
+        }
+
+        .result-item .value.not-found {
+            color: rgba(255, 107, 107, 0.6);
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .error {
+            display: none;
+            background: rgba(255, 107, 107, 0.08);
+            border: 1px solid rgba(255, 107, 107, 0.15);
+            padding: 14px 18px;
+            border-radius: 14px;
+            margin-top: 16px;
+            color: #ff6b6b;
+            font-size: 14px;
+            animation: fadeIn 0.3s ease;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .error.show {
+            display: flex;
+        }
+
+        .error i {
+            font-size: 18px;
+            color: #ff6b6b;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .footer .developer {
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .footer .developer i {
+            color: #667eea;
+        }
+
+        .footer .channel-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer .channel-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .channel-link i {
+            color: #25D366;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 20px 25px;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .input-group {
+                flex-direction: column;
+                background: transparent;
+                padding: 0;
+                border: none;
+                gap: 10px;
+            }
+
+            .input-group input {
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 14px;
+                padding: 16px 18px;
+                border: 1px solid rgba(255, 255, 255, 0.06);
+            }
+
+            .input-group:focus-within {
+                border-color: transparent;
+                box-shadow: none;
+            }
+
+            .btn-check {
+                justify-content: center;
+                padding: 16px;
+                border-radius: 14px;
+            }
+
+            .result-item {
+                padding: 12px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .result-item .value {
+                max-width: 100%;
+                text-align: left;
+                font-size: 15px;
+                padding-left: 28px;
+            }
+
+            .logo-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo-wrapper i {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <div class="logo-wrapper">
+                <i class="fas fa-sim-card"></i>
+            </div>
+            <h1>MR REAN SIM DATABASE</h1>
+            <p>Enter any Pakistani mobile number</p>
+        </div>
+
+        <div class="input-section">
+            <div class="country-badge">
+                <i class="fas fa-flag"></i>
+                <span>Pakistan (+92)</span>
+            </div>
+
+            <div class="input-group">
+                <input type="tel" id="phoneInput" placeholder="3XXXXXXXXX" maxlength="13" autofocus>
+                <button class="btn-check" id="checkBtn" onclick="checkNumber()">
+                    <i class="fas fa-search"></i>
+                    <span>Check</span>
+                </button>
+            </div>
+
+            <div class="quick-numbers">
+                <button onclick="setNumber('3012345678')">3012345678</button>
+                <button onclick="setNumber('3023456789')">3023456789</button>
+                <button onclick="setNumber('3034567890')">3034567890</button>
+                <button onclick="setNumber('3045678901')">3045678901</button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Fetching subscriber details...</p>
+        </div>
+
+        <div class="error" id="error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Error message</span>
+        </div>
+
+        <div class="result" id="result">
+            <div class="result-card">
+                <div class="result-item">
+                    <span class="label"><i class="fas fa-phone"></i> Mobile</span>
+                    <span class="value" id="mobile">—</span>
+                </div>
+                <div class="result-item">
+                    <span class="label"><i class="fas fa-user"></i> Name</span>
+                    <span class="value" id="name">—</span>
+                </div>
+                <div class="result-item">
+                    <span class="label"><i class="fas fa-id-card"></i> CNIC</span>
+                    <span class="value" id="cnic">—</span>
+                </div>
+                <div class="result-item">
+                    <span class="label"><i class="fas fa-map-pin"></i> Address</span>
+                    <span class="value" id="address">—</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="developer">
+                <i class="fas fa-code"></i> POWERED BY MR REAN
+            </div>
+            <a href="https://whatsapp.com/channel/0029VbE3z5Q6BIEh0jfG0z2K" class="channel-link" target="_blank">
+                <i class="fab fa-whatsapp"></i> Join our Channel
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById('phoneInput');
+        const checkBtn = document.getElementById('checkBtn');
+        const resultDiv = document.getElementById('result');
+        const loadingDiv = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+        const errorText = document.getElementById('errorText');
+        const mobileEl = document.getElementById('mobile');
+        const nameEl = document.getElementById('name');
+        const cnicEl = document.getElementById('cnic');
+        const addressEl = document.getElementById('address');
+
+        function setNumber(num) {
+            phoneInput.value = num;
+            checkNumber();
+        }
+
+        phoneInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                checkNumber();
+            }
+        });
+
+        window.addEventListener('load', () => phoneInput.focus());
+
+        async function checkNumber() {
+            let raw = phoneInput.value.trim();
+            
+            if (!raw) {
+                showError('Please enter a phone number');
+                return;
+            }
+
+            const cleanNumber = raw.replace(/\D/g, '');
+            
+            if (cleanNumber.length < 10 || cleanNumber.length > 13) {
+                showError('Please enter a valid 10-13 digit number');
+                return;
+            }
+
+            resultDiv.classList.remove('show');
+            errorDiv.classList.remove('show');
+            loadingDiv.classList.remove('show');
+
+            loadingDiv.classList.add('show');
+            checkBtn.disabled = true;
+
+            try {
+                // 🔥 UPDATED: Use PHP proxy instead of direct API
+                const API_URL = `/api.php?number=${encodeURIComponent(cleanNumber)}`;
+                
+                console.log('📞 Calling Proxy:', API_URL);
+                
+                const response = await fetch(API_URL);
+                
+                console.log('📡 Response Status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('📦 Full Response:', data);
+
+                loadingDiv.classList.remove('show');
+
+                // Check if data exists
+                if (data && data.data && data.data.length > 0) {
+                    const res = data.data[0];
+                    
+                    console.log('✅ Record Found:', res);
+                    
+                    mobileEl.textContent = res.phone || cleanNumber;
+                    nameEl.textContent = res.full_name || 'Not Found';
+                    cnicEl.textContent = res.cnic || 'Not Found';
+                    addressEl.textContent = res.address || 'Not Found';
+
+                    document.querySelectorAll('.value').forEach(el => {
+                        if (el.textContent === 'Not Found') {
+                            el.classList.add('not-found');
+                        } else {
+                            el.classList.remove('not-found');
+                        }
+                    });
+
+                    resultDiv.classList.add('show');
+                } else {
+                    console.log('❌ No record found');
+                    showError('No record found for this number');
+                }
+
+            } catch (error) {
+                console.error('❌ Error:', error);
+                loadingDiv.classList.remove('show');
+                showError('Error: ' + error.message);
+            } finally {
+                checkBtn.disabled = false;
+            }
+        }
+
+        function showError(msg) {
+            errorText.textContent = msg;
+            errorDiv.classList.add('show');
+            
+            clearTimeout(window.errorTimeout);
+            window.errorTimeout = setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 6000);
+        }
+
+        phoneInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+            errorDiv.classList.remove('show');
+        });
+    </script>
+
+</body>
+</html>
